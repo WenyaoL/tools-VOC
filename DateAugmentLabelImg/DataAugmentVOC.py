@@ -42,7 +42,7 @@ class DataAugmentVOC:
 
     def addNoise(self):
         '''
-            对VOC数据集的所有图片添加噪音，并复制一份label文件
+            对VOC数据集的所有图片添加高斯噪音，并复制一份label文件
         :return:
         '''
         start = time.time()
@@ -55,22 +55,24 @@ class DataAugmentVOC:
                         [int(cv2.IMWRITE_JPEG_QUALITY), 95]
                         )
             self.labP.setXML(xml)
-            self.labP.copyXML(self.save_xmlpath,"noise"+str(count)+".xml")
+            self.labP.copyXML(save_path=self.save_xmlpath,newname="noise_"+str(count)+".xml")
         end = time.time()
         print('A total of {} noise images are generated,a total of {}s'.format(str(count),end-start))
 
-    def changeLight(self):
+    def changeLight(self,r=None):
         '''
             对VOC数据集的所有图片调节亮度，并复制一份label文件
+        :param r: 亮化程度
         :return:
         '''
+
         start = time.time()
         count = 0
         for img, xml in tqdm(zip(self.ImgPathlist, self.XMLPathlist)):
             count +=1
             self.imgP.setImg(img)
             cv2.imwrite(self.save_imgpath+"\\change_light_"+str(count)+".jpg",
-                        self.imgP.changeLight_Img(),
+                        self.imgP.changeLight_Img(r=r),
                         [int(cv2.IMWRITE_JPEG_QUALITY), 95]
                         )
 
@@ -135,7 +137,7 @@ class DataAugmentVOC:
 
 if __name__ == '__main__':
     start = time.time()
-    V = DataAugmentVOC(rootpath=r'F:\VOC\VOC2007')
+    V = DataAugmentVOC(rootpath=r'.\TestDate\VOC')
     V.addNoise()
     V.changeLight()
     V.rotate(angle=15)

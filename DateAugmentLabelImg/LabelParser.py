@@ -45,15 +45,17 @@ class LabelParser:
     def changeObject(self):
         pass
 
-    def reverse_Object(self,filp=0,save_path=None):
+    def reverse_Object(self,filp=1,save_path=None):
         '''
             对label文件中的所有目标对象进行反转,默认存储在原文件
-        :param filp: 反转方式（0：水平，1：垂直）
+        :param filp: 反转方式（1：水平，0：垂直）
         :param save_path: 新的保存路径
         :return:
         '''
+        if os.path.isdir(save_path):
+            save_path = os.path.join(save_path, self.XMLName.split('.')[0] + "_reverse_Object.xml")
 
-        if filp==0:
+        if filp==1:
             width = self.root.find('.//size/width')
             xmin = self.root.findall('.//bndbox/xmin')
             xmax = self.root.findall('.//bndbox/xmax')
@@ -62,7 +64,7 @@ class LabelParser:
                 xmax[index].text = str(int(width.text) - int(xmax[index].text))
 
 
-        if filp==1:
+        if filp==0:
             height = self.root.find('.//size/height')
             ymin = self.root.findall('.//bndbox/ymin')
             ymax = self.root.findall('.//bndbox/ymax')
@@ -82,9 +84,13 @@ class LabelParser:
         :param save_path:新的保存路径
         :return:
         '''
+
+
         if save_path is None:
             save_path =self.XMLPath
 
+        if os.path.isdir(save_path):
+            save_path = os.path.join(save_path, self.XMLName.split('.')[0] + "_reverse_Object.xml")
 
         #更改图片大小
         self.root.find('size/width').text = str(w)
@@ -121,7 +127,7 @@ class LabelParser:
 
 
 
-    def copyXML(self, save_path, newname):
+    def copyXML(self, save_path=None, newname=None):
         '''
             复制当前XML文件到指定的新目录下
 
@@ -134,7 +140,8 @@ class LabelParser:
             save_path = os.path.join(save_path, newname)
 
         path = self.root.find('path')
-        path.text = save_path
+        if path:
+            path.text = save_path
         self.tree.write(save_path, encoding="utf-8", xml_declaration=True)
 
     def deleteObject(self, ObjectName, save_path=None):
@@ -146,6 +153,9 @@ class LabelParser:
         :param save_path: 指定新的保存路径
         :return:
         '''
+        if save_path is None:
+            save_path =self.XMLPath
+
         if os.path.isdir(save_path):
             save_path = os.path.join(save_path, self.XMLName.split('.')[0] + "_change.xml")
 
@@ -170,6 +180,8 @@ class LabelParser:
         :param save_path: 新的文件保存路径
         :return:
         '''
+        if save_path is None:
+            save_path =self.XMLPath
         if os.path.isdir(save_path):
             save_path = os.path.join(save_path, self.XMLName.split('.')[0] + "_change.xml")
 
@@ -206,8 +218,10 @@ class LabelParser:
         :param save_path: 标签文件存储路径
         :return:
         '''
+        if save_path is None:
+            save_path =self.XMLPath
         if os.path.isdir(save_path):
-            save_path = os.path.join(save_path, self.XMLName.split('.')[0] + "_change.xml")
+            save_path = os.path.join(save_path, self.XMLName.split('.')[0] + "_changeImg_size.xml")
 
         width = self.root.find('size/width')
         oldwidth = float(width.text)
@@ -237,8 +251,20 @@ class LabelParser:
 
 
 if __name__ == '__main__':
-    paser = LabelParser(r'.\TestDate\Annotations2\0001_2.xml')
-    paser.changeImg_size([1222,1250],r'.\TestDate\Annotations2')
+    #加载
+    paser = LabelParser(r'.\TestDate\label\000004.xml')
+    #改变图片大小
+    paser.changeImg_size([1222,1250],r'.\TestDate\label')
+    #获取图片size
+    print(paser.getImg_size())
+    #改变对象名，默认写回加载文件，也可以指定新的路径。
+    paser.change_ObjectName('car', 'bigcar',save_path='.\TestDate\label')
 
+    #删除指定Object
     #paser.deleteObject('star')
-    #print(paser.getObject())
+
+    #获得对象数据
+    print(paser.getObject())
+
+    #对label里面的框做镜像反转,并指定新保存路径
+    paser.reverse_Object(filp=0, save_path='.\TestDate\label')

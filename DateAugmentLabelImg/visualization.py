@@ -5,10 +5,11 @@ from tqdm import tqdm
 
 '''
     脚本来自：https://blog.csdn.net/ptgood/article/details/86997486
+    在此基础上做了些bug的修复
 '''
-image_path=r"F:\VOC\VOC2007\change_JPEGImages"
-annotation_path=r"F:\VOC\VOC2007\change_Annotations"
-save_path =r'F:\VOC\VOC2007\vision'
+image_path=r".\TestDate\VOC\change_JPEGImages"
+annotation_path=r".\TestDate\VOC\change_Annotations"
+save_path =r'.\TestDate\VOC\vision2'
 
 img_names = os.listdir(image_path)
 xml_names = os.listdir(annotation_path)
@@ -36,8 +37,10 @@ for img_n, xml_n in tqdm(zip(img_names, xml_names)):
         ymax_data=int(ymax.childNodes[0].data)
         label_name=object.getElementsByTagName('name')[0].childNodes[0].data
         cv2.rectangle(img,(xmin_data,ymin_data),(xmax_data,ymax_data),(55,255,155),1)
-        cv2.putText(img,label_name,(int((xmin_data+xmax_data/2)),int((ymin_data+ymax_data)/2)),cv2.FONT_HERSHEY_SIMPLEX,2,(0,255,0),3)
+        cv2.putText(img,label_name,(xmin_data,ymin_data),cv2.FONT_HERSHEY_SIMPLEX,1,(0,255,0),1)
     flag=0
+    if not os.path.exists(save_path):
+        os.makedirs(save_path)
     flag=cv2.imwrite(os.path.join(save_path,img_n),img)
     if not (flag):
         print(img_n,"error")

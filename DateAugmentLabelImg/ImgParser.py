@@ -1,9 +1,8 @@
-import copy
 import math
 import os
 import random
 import time
-
+import matplotlib.pyplot as plt
 import cv2
 import numpy as np
 from skimage.util import random_noise
@@ -75,11 +74,11 @@ class ImgParser:
             img = cv2.flip(img, -1)
         return img
 
-    def changeLight_Img(self, img=None):
+    def changeLight_Img(self, img=None,r=None):
         if img is None:
             img =self.img
-
-        r = random.uniform(0.35, 1)
+        if r is None:
+            r = random.uniform(0.35, 1)
         blank = np.zeros(img.shape, img.dtype)
         return cv2.addWeighted(img, r, blank, 1 - r, 0)
 
@@ -143,10 +142,20 @@ class ImgParser:
 if __name__ == '__main__':
     #I =ImgParser(r'.\TestDate\Images\0001.jpg')
     I = ImgParser()
-    I.setImg(r'.\TestDate\Images\0001.jpg')
-    # 因为要[0,1]的浮点数或[0,255]的整数，由于这里是浮点数，所有要映射回去[0,1]
-    cv2.imshow('img', I.addNoise_Img()/255)
-    cv2.waitKey(0)
+    I.setImg(r'.\TestDate\Images\000004.jpg')
+    img5, _ =I.rotate_Img()
+    img = [I.addNoise_Img()/255,I.changeLight_Img(),I.filp_img(),I.shift_Img(50,50),img5]
 
+    pic = ['noise', 'changeLight', 'filp', 'shift','rotate']
+    plt.figure(figsize=(8,6))
+    for i in range(5):
+        plt.subplot(2, 3, i + 1)
+        plt.imshow(img[i])
+        plt.title(pic[i])
+    plt.show()
+    # 因为要[0,1]的浮点数或[0,255]的整数，由于这里是浮点数，所有要映射回去[0,1]
+   # cv2.imshow('img', I.addNoise_Img()/255)
+    #cv2.waitKey(0)
     #存储，不要映射回去[0,1]
-    cv2.imwrite(r'F:\python_workplace\tools-VOC\DateAugmentLabelImg\TestDate\001.jpg',I.addNoise_Img())
+   # cv2.imwrite(r'.\TestDate\Images\000004_noise.jpg',I.addNoise_Img())
+
