@@ -39,7 +39,7 @@ if __name__ == '__main__':
    # cv2.imwrite(r'.\TestDate\Images\000004_noise.jpg',I.addNoise_Img())
 ```
 
-![image](https://github.com/Mygithub-Yao/tools-VOC/blob/master/DateAugmentLabelImg/TestDate/27.png)
+![image](https://github.com/Mygithub-Yao/tools-VOC/blob/master/DateAugmentLabelImg/TestDate/29.png)
 
 ### LabelParser模块
 
