@@ -5,7 +5,7 @@
 
 这个模块是脚本，主要功能是通过图片和其label文件，生成带bboxs的图片。效果如下图片
 
-<img src=".\TestDate\VOC\vision\000004.jpg" alt="000004" style="zoom:67%;" />
+![image](https://github.com/Mygithub-Yao/tools-VOC/blob/master/DateAugmentLabelImg/TestDate/VOC/vision/000004.jpg)
 
 ### ImgParser模块
 
@@ -39,7 +39,7 @@ if __name__ == '__main__':
    # cv2.imwrite(r'.\TestDate\Images\000004_noise.jpg',I.addNoise_Img())
 ```
 
-<img src="E:\云\typora文档\文档图片集\29.png" alt="29" style="zoom: 80%;" />
+![image](https://github.com/Mygithub-Yao/tools-VOC/blob/master/DateAugmentLabelImg/TestDate/27.png)
 
 ### LabelParser模块
 
@@ -133,8 +133,8 @@ if __name__ == '__main__':
 
 生成结果保存在新文件夹：
 
-![30](E:\云\typora文档\文档图片集\30.png)
+![image](https://github.com/Mygithub-Yao/tools-VOC/blob/master/DateAugmentLabelImg/TestDate/30.png)
 
 结果图片：（部分）
 
-![31](E:\云\typora文档\文档图片集\31.png)
+![31](https://github.com/Mygithub-Yao/tools-VOC/blob/master/DateAugmentLabelImg/TestDate/31.png)
