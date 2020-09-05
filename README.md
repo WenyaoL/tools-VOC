@@ -5,7 +5,7 @@
 
 这个模块是脚本，主要功能是通过图片和其label文件，生成带bboxs的图片。效果如下图片
 
-<img src="F:\python_workplace\tools-VOC\DateAugmentLabelImg\TestDate\VOC\vision\000004.jpg" alt="000004" style="zoom:67%;" />
+<img src=".\TestDate\VOC\vision\000004.jpg" alt="000004" style="zoom:67%;" />
 
 ### ImgParser模块
 
