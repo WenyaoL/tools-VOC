@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<annotation>
+	<folder>VOC2007</folder>
+	<filename>000002.jpg</filename>
+	<source>
+		<database>The VOC2007 Database</database>
+		<annotation>PASCAL VOC2007</annotation>
+		<image>flickr</image>
+		<flickrid>329145082</flickrid>
+	</source>
+	<owner>
+		<flickrid>hiromori2</flickrid>
+		<name>Hiroyuki Mori</name>
+	</owner>
+	<size>
+		<width>570</width>
+		<height>453</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>train</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>199</xmin>
+			<ymin>235</ymin>
+			<xmax>265</xmax>
+			<ymax>333</ymax>
+		</bndbox>
+	</object>
+</annotation>
