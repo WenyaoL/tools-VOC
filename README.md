@@ -9,7 +9,7 @@
 
 ### ImgParser模块
 
-里面有class ImgParser类，类提供了5个图片数据增强的功能，分别是：加噪音（高斯），反转，旋转，平移，光度随机调节。
+里面有class ImgParser类，类提供了5个图片数据增强的功能，分别是：加噪音（高斯），反转，旋转，平移，光度随机调节,hvs调节。
 
 ```python
 def addNoise_Img(self, img=None):
@@ -115,6 +115,9 @@ def changeLight(self,r=None):
 
 #对VOC数据集的所有图片添加高斯噪音，并复制一份label文件
 def addNoise(self):
+    
+#对VOC数据集进行HVS调整
+def changeHsv(self,hub=.1, sat=.1, val=.1):
 ```
 
 小示例：
@@ -123,6 +126,7 @@ def addNoise(self):
 if __name__ == '__main__':
     start = time.time()
     V = DataAugmentVOC(rootpath=r'.\TestDate\VOC')
+    V.changeHsv(hub=30,sat=1.2, val=1.2)  #hub 0~180   sat 0~2   val 0~2
     V.addNoise()
     V.changeLight()
     V.rotate(angle=15)
@@ -131,4 +135,4 @@ if __name__ == '__main__':
     print("total of {}".format(end-start))
 ```
 
-
+![image](./show_picture/71.jpg)
