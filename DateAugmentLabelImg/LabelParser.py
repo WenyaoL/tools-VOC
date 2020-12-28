@@ -140,7 +140,7 @@ class LabelParser:
             save_path = os.path.join(save_path, newname)
 
         path = self.root.find('path')
-        if path:
+        if path is not None:
             path.text = save_path
         self.tree.write(save_path, encoding="utf-8", xml_declaration=True)
 

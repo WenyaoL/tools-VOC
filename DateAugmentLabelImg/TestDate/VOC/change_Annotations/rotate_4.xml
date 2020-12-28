@@ -13,8 +13,8 @@
 		<name>Payton Chung</name>
 	</owner>
 	<size>
-		<width>522</width>
-		<height>589</height>
+		<width>449</width>
+		<height>534</height>
 		<depth>3</depth>
 	</size>
 	<segmented>0</segmented>
@@ -24,10 +24,10 @@
 		<truncated>0</truncated>
 		<difficult>0</difficult>
 		<bndbox>
-			<xmin>99</xmin>
-			<ymin>417</ymin>
-			<xmax>169</xmax>
-			<ymax>467</ymax>
+			<xmin>42</xmin>
+			<ymin>349</ymin>
+			<xmax>114</xmax>
+			<ymax>400</ymax>
 		</bndbox>
 	</object>
 	<object>
@@ -36,9 +36,9 @@
 		<truncated>1</truncated>
 		<difficult>0</difficult>
 		<bndbox>
-			<xmin>442</xmin>
-			<ymin>336</ymin>
-			<xmax>577</xmax>
+			<xmin>391</xmin>
+			<ymin>334</ymin>
+			<xmax>530</xmax>
 			<ymax>394</ymax>
 		</bndbox>
 	</object>
@@ -48,10 +48,10 @@
 		<truncated>0</truncated>
 		<difficult>0</difficult>
 		<bndbox>
-			<xmin>317</xmin>
-			<ymin>372</ymin>
-			<xmax>414</xmax>
-			<ymax>418</ymax>
+			<xmin>264</xmin>
+			<ymin>345</ymin>
+			<xmax>364</xmax>
+			<ymax>393</ymax>
 		</bndbox>
 	</object>
 	<object>
@@ -60,34 +60,10 @@
 		<truncated>0</truncated>
 		<difficult>0</difficult>
 		<bndbox>
-			<xmin>258</xmin>
-			<ymin>390</ymin>
-			<xmax>333</xmax>
-			<ymax>426</ymax>
-		</bndbox>
-	</object>
-	<object>
-		<name>car</name>
-		<pose>Unspecified</pose>
-		<truncated>0</truncated>
-		<difficult>0</difficult>
-		<bndbox>
-			<xmin>222</xmin>
-			<ymin>396</ymin>
-			<xmax>271</xmax>
-			<ymax>434</ymax>
-		</bndbox>
-	</object>
-	<object>
-		<name>car</name>
-		<pose>Unspecified</pose>
-		<truncated>0</truncated>
-		<difficult>0</difficult>
-		<bndbox>
-			<xmin>192</xmin>
-			<ymin>409</ymin>
-			<xmax>233</xmax>
-			<ymax>437</ymax>
+			<xmin>204</xmin>
+			<ymin>350</ymin>
+			<xmax>282</xmax>
+			<ymax>388</ymax>
 		</bndbox>
 	</object>
 	<object>
@@ -97,9 +73,33 @@
 		<difficult>0</difficult>
 		<bndbox>
 			<xmin>168</xmin>
-			<ymin>414</ymin>
-			<xmax>204</xmax>
-			<ymax>441</ymax>
+			<ymin>348</ymin>
+			<xmax>218</xmax>
+			<ymax>387</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>car</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>137</xmin>
+			<ymin>356</ymin>
+			<xmax>179</xmax>
+			<ymax>384</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>car</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>113</xmin>
+			<ymin>356</ymin>
+			<xmax>150</xmax>
+			<ymax>384</ymax>
 		</bndbox>
 	</object>
 </annotation>

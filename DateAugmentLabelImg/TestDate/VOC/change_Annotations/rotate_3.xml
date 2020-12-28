@@ -13,8 +13,8 @@
 		<name>?</name>
 	</owner>
 	<size>
-		<width>492</width>
-		<height>581</height>
+		<width>418</width>
+		<height>531</height>
 		<depth>3</depth>
 	</size>
 	<segmented>0</segmented>
@@ -24,10 +24,10 @@
 		<truncated>0</truncated>
 		<difficult>0</difficult>
 		<bndbox>
-			<xmin>164</xmin>
-			<ymin>235</ymin>
-			<xmax>253</xmax>
-			<ymax>275</ymax>
+			<xmin>137</xmin>
+			<ymin>183</ymin>
+			<xmax>230</xmax>
+			<ymax>224</ymax>
 		</bndbox>
 	</object>
 	<object>
@@ -36,10 +36,10 @@
 		<truncated>0</truncated>
 		<difficult>0</difficult>
 		<bndbox>
-			<xmin>277</xmin>
-			<ymin>209</ymin>
-			<xmax>344</xmax>
-			<ymax>257</ymax>
+			<xmin>253</xmin>
+			<ymin>175</ymin>
+			<xmax>322</xmax>
+			<ymax>225</ymax>
 		</bndbox>
 	</object>
 </annotation>

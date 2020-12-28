@@ -13,8 +13,8 @@
 		<name>Hiroyuki Mori</name>
 	</owner>
 	<size>
-		<width>570</width>
-		<height>453</height>
+		<width>528</width>
+		<height>378</height>
 		<depth>3</depth>
 	</size>
 	<segmented>0</segmented>
@@ -24,10 +24,10 @@
 		<truncated>0</truncated>
 		<difficult>0</difficult>
 		<bndbox>
-			<xmin>199</xmin>
-			<ymin>235</ymin>
-			<xmax>265</xmax>
-			<ymax>333</ymax>
+			<xmin>160</xmin>
+			<ymin>213</ymin>
+			<xmax>229</xmax>
+			<ymax>314</ymax>
 		</bndbox>
 	</object>
 </annotation>

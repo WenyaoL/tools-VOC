@@ -7,9 +7,12 @@ from tqdm import tqdm
     脚本来自：https://blog.csdn.net/ptgood/article/details/86997486
     在此基础上做了些bug的修复
 '''
-image_path=r".\TestDate\VOC\change_JPEGImages"
-annotation_path=r".\TestDate\VOC\change_Annotations"
-save_path =r'.\TestDate\VOC\vision2'
+#image_path=r".\TestDate\VOC\change_JPEGImages"
+#annotation_path=r".\TestDate\VOC\change_Annotations"
+#save_path =r'.\TestDate\VOC\vision2'
+image_path=r"F:\alldate\test1\SHONG\JPEGImages"
+annotation_path=r"F:\alldate\test1\SHONG\Annotations"
+save_path =r'F:\alldate\test1\SHONG\vision'
 
 img_names = os.listdir(image_path)
 xml_names = os.listdir(annotation_path)

@@ -13,8 +13,8 @@
 		<name>Thom Zemanek</name>
 	</owner>
 	<size>
-		<width>452</width>
-		<height>570</height>
+		<width>376</width>
+		<height>528</height>
 		<depth>3</depth>
 	</size>
 	<segmented>0</segmented>
@@ -24,10 +24,10 @@
 		<truncated>1</truncated>
 		<difficult>0</difficult>
 		<bndbox>
-			<xmin>185</xmin>
-			<ymin>94</ymin>
-			<xmax>533</xmax>
-			<ymax>366</ymax>
+			<xmin>157</xmin>
+			<ymin>65</ymin>
+			<xmax>515</xmax>
+			<ymax>345</ymax>
 		</bndbox>
 	</object>
 </annotation>

@@ -13,8 +13,8 @@
 		<name>Jinky the Fruit Bat</name>
 	</owner>
 	<size>
-		<width>575</width>
-		<height>471</height>
+		<width>529</width>
+		<height>396</height>
 		<depth>3</depth>
 	</size>
 	<segmented>0</segmented>
@@ -24,10 +24,10 @@
 		<truncated>1</truncated>
 		<difficult>0</difficult>
 		<bndbox>
-			<xmin>125</xmin>
-			<ymin>291</ymin>
-			<xmax>268</xmax>
-			<ymax>419</ymax>
+			<xmin>74</xmin>
+			<ymin>259</ymin>
+			<xmax>221</xmax>
+			<ymax>390</ymax>
 		</bndbox>
 	</object>
 	<object>
@@ -36,10 +36,10 @@
 		<truncated>1</truncated>
 		<difficult>0</difficult>
 		<bndbox>
-			<xmin>73</xmin>
-			<ymin>56</ymin>
-			<xmax>407</xmax>
-			<ymax>526</ymax>
+			<xmin>30</xmin>
+			<ymin>27</ymin>
+			<xmax>373</xmax>
+			<ymax>512</ymax>
 		</bndbox>
 	</object>
 </annotation>
