@@ -93,7 +93,6 @@ class ImgParser:
         if img is None:
             img = self.img
         img_hsv = cv2.cvtColor(img, cv2.COLOR_RGB2HSV).astype(np.float)
-        print(img_hsv.shape)
         img_hsv[:, :, 0] = (img_hsv[:, :, 0] + hue_delta) % 180
         img_hsv[:, :, 1] *= sat_mult
         img_hsv[:, :, 2] *= val_mult
@@ -161,19 +160,20 @@ if __name__ == '__main__':
     #I =ImgParser(r'.\TestDate\Images\0001.jpg')
     I = ImgParser()
     I.setImg(r'.\TestDate\Images\000004.jpg')
-    img = I.hsv_transform(hue_delta=1, sat_mult=1.2, val_mult=1.2)
-    print(img.shape)
-    plt.imshow(img)
+    img5, _ =I.rotate_Img()
+    img = [I.addNoise_Img()/255,
+           I.changeLight_Img(),
+           I.filp_img(),
+           I.shift_Img(50,50),
+           img5,
+           I.hsv_transform(hue_delta=30, sat_mult=1.2, val_mult=1.2)]
 
-    #img5, _ =I.rotate_Img()
-    #img = [I.addNoise_Img()/255,I.changeLight_Img(),I.filp_img(),I.shift_Img(50,50),img5]
-
-    #pic = ['noise', 'changeLight', 'filp', 'shift','rotate']
-    #plt.figure(figsize=(8,6))
-    #for i in range(5):
-     #   plt.subplot(2, 3, i + 1)
-      #  plt.imshow(img[i])
-      #  plt.title(pic[i])
+    pic = ['noise', 'changeLight', 'filp', 'shift','rotate','changeHvs']
+    plt.figure(figsize=(8,6))
+    for i in range(6):
+        plt.subplot(2, 3, i + 1)
+        plt.imshow(img[i])
+        plt.title(pic[i])
     plt.show()
 
     # 因为要[0,1]的浮点数或[0,255]的整数，由于这里是浮点数，所有要映射回去[0,1]
