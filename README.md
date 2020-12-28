@@ -5,7 +5,7 @@
 
 这个模块是脚本，主要功能是通过图片和其label文件，生成带bboxs的图片。效果如下图片
 
-![image](https://github.com/Mygithub-Yao/tools-VOC/blob/master/DateAugmentLabelImg/TestDate/VOC/vision/000004.jpg)
+![image](./show_picture/000004.jpg)
 
 ### ImgParser模块
 
@@ -17,6 +17,7 @@ def filp_img(self, img=None, filp=1):
 def rotate_Img(self, img=None, angle=5, scale=1.):
 def shift_Img(self,x,y,img=None):
 def changeLight_Img(self, img=None):
+def hsv_transform(self, img=None, hue_delta=30, sat_mult=1.2, val_mult=1.2):
 ```
 
 功能展示：
@@ -27,7 +28,6 @@ if __name__ == '__main__':
     I.setImg(r'.\TestDate\Images\000004.jpg')
     img5, _ =I.rotate_Img()
     img = [I.addNoise_Img()/255,I.changeLight_Img(),I.filp_img(),I.shift_Img(50,50),img5]
-
     pic = ['noise', 'changeLight', 'filp', 'shift','rotate']
     plt.figure(figsize=(8,6))
     for i in range(5):
@@ -39,7 +39,7 @@ if __name__ == '__main__':
    # cv2.imwrite(r'.\TestDate\Images\000004_noise.jpg',I.addNoise_Img())
 ```
 
-![image](https://github.com/Mygithub-Yao/tools-VOC/blob/master/DateAugmentLabelImg/TestDate/29.png)
+
 
 ### LabelParser模块
 
@@ -131,10 +131,4 @@ if __name__ == '__main__':
     print("total of {}".format(end-start))
 ```
 
-生成结果保存在新文件夹：
 
-![image](https://github.com/Mygithub-Yao/tools-VOC/blob/master/DateAugmentLabelImg/TestDate/30.png)
-
-结果图片：（部分）
-
-![31](https://github.com/Mygithub-Yao/tools-VOC/blob/master/DateAugmentLabelImg/TestDate/31.png)
