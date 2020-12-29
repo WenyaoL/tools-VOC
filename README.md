@@ -1,138 +1,84 @@
-# VOCDateAugment
-目的：对VOC数据集的对象检测的数据进行数据增强。
-**如果能帮到您请给本人一颗⭐，拜托了！！！！！**
-### visualiztion模块
+# 对PASCAL VOC 数据集进行数据增强
 
-这个模块是脚本，主要功能是通过图片和其label文件，生成带bboxs的图片。效果如下图片
+### 1.GitHub仓库位置
 
-![image](./show_picture/000004.jpg)
+目的：对VOC数据集的对象检测的数据进行数据增强。**如果能帮到您请给本人一颗⭐，拜托了！！！！！**
 
-### ImgParser模块
+https://github.com/Mygithub-Yao/tools-VOC
 
-里面有class ImgParser类，类提供了5个图片数据增强的功能，分别是：加噪音（高斯），反转，旋转，平移，光度随机调节,hvs调节。
+### 2.项目目录解析
 
-```python
-def addNoise_Img(self, img=None):
-def filp_img(self, img=None, filp=1):
-def rotate_Img(self, img=None, angle=5, scale=1.):
-def shift_Img(self,x,y,img=None):
-def changeLight_Img(self, img=None):
-def hsv_transform(self, img=None, hue_delta=30, sat_mult=1.2, val_mult=1.2):
+```
+DataAugmentLabelImg   //增强功能代码
+show_picture         //readme.md文件用的的图片
+TestData			//测试数据集
+Augment_scripy.py          //脚本代码
+README.md
 ```
 
-功能展示：
+### 3.使用script对数据集增强
 
-```python
-if __name__ == '__main__':
-    I = ImgParser()
-    I.setImg(r'.\TestDate\Images\000004.jpg')
-    img5, _ =I.rotate_Img()
-    img = [I.addNoise_Img()/255,I.changeLight_Img(),I.filp_img(),I.shift_Img(50,50),img5]
-    pic = ['noise', 'changeLight', 'filp', 'shift','rotate']
-    plt.figure(figsize=(8,6))
-    for i in range(5):
-        plt.subplot(2, 3, i + 1)
-        plt.imshow(img[i])
-        plt.title(pic[i])
-    plt.show()
-    #存储，不要映射回去[0,1]
-   # cv2.imwrite(r'.\TestDate\Images\000004_noise.jpg',I.addNoise_Img())
+#### 3.1获取帮助
+
+```
+python Augment_scrict.py -h
 ```
 
+显示结果：
 
+```
+usage: Augment_scrict.py [-h] [--root ROOT_PATH] [--xmlpath XMLPATH]
+                         [--imgpath IMGPATH] [--hub HUB] [--sat SAT]
+                         [--val VAL] [--rotate ROTATE] [--Noise NOISE]
+                         [--changeLight CHANGELIGHT] [--filp FILP]
 
-### LabelParser模块
+aug dataset
 
-此功能模块主要是对标签进行处理的，里面包含一个class LabelParser的类，并且提供一下功能：
-
-```python
-#从xml文件中提取bounding box信息, 格式为[[ name,x_min, y_min, x_max, y_max]]
-def getObject(self,XMLpath =None):
-
-#对label文件中的所有目标对象进行反转,默认存储在原文件
-def reverse_Object(self,filp=0,save_path=None):
-
-#根据仿射变换矩阵来对对象标签进行转换,默认保存路径为原文件，也可以指定新的路径
-def rotate_Object(self, rot_mat,w,h,c,save_path =None, folder_name=None):
-
-#复制当前XML文件到指定的新目录下
-def copyXML(self, save_path, newname):
-
-#删除标签文件里的对应对象，默认写回到原文件，如果指定新的保存路径，信息将保存到新的文件中
-def deleteObject(self, ObjectName, save_path=None):
-
-#更改当前xml文件的对象名，默认写回原文件，也可以通过NewPath指定新的保存路径
-def change_ObjectName(self, oldName, newName, save_path=None):
-
-#返回标签图片的宽，高，通道
-def getImg_size(self):
-
-#文件默认存储路径为原文件，可以通过NewPath指定新的保存路径
-def changeImg_size(self, newsize, save_path=None):
-
-#设置要解析的标签文件
-def setXML(self,path):
+optional arguments:
+  -h, --help            show this help message and exit
+  --root ROOT_PATH      dataset root path
+  --xmlpath XMLPATH     自定义xml文件位置,默认是数据集根目录下生成新的文件夹
+  --imgpath IMGPATH     自定义img文件位置,默认是数据集根目录下生成新的文件夹
+  --hub HUB             hub调节,范围0~180
+  --sat SAT             饱和度变化比例调节,范围0~2
+  --val VAL             明度变化比例调节,范围0~2
+  --rotate ROTATE       旋转角度
+  --Noise NOISE         添加高斯噪音
+  --changeLight CHANGELIGHT
+                        随机光度调节
+  --filp FILP           水平翻转
 ```
 
-一个小示例：
+#### 3.2增强例子
 
-```python
-if __name__ == '__main__':	
-	#加载
-    paser = LabelParser(r'.\TestDate\label\000004.xml')
-    #改变图片大小
-    paser.changeImg_size([1222,1250],r'.\TestDate\label')
-    #获取图片size
-    print(paser.getImg_size())
-    #改变对象名，默认写回加载文件，也可以指定新的路径。
-    paser.change_ObjectName('car', 'bigcar',save_path='.\TestDate\label')
+**hvs调节**
 
-    #删除指定Object
-    #paser.deleteObject('star')
-
-    #获得对象数据
-    print(paser.getObject())
-
-    #对label里面的框做镜像反转,并指定新保存路径
-    paser.reverse_Object(filp=0, save_path='.\TestDate\label')
+```shell
+python Augment_scrict.py --hub=30 --sat=1.2 --val=1.2  --root=./TestData/VOC
 ```
 
-### DataAugmentVOC模块
+**随机亮度调节**
 
-此模块提供简易的批处理数据增强，通过新建类DataAugmentVOC来提供批量VOC数据集的数据增强。
-
-提供以下功能：
-
-```python
-#图片反转，默认水平反转
-def filp(self,filp=1):
-
-#对VOC数据集的数据进行旋转，生成新的旋转图片和新的label文件
-def rotate(self,angle=5, scale=1.):
-
-#对VOC数据集的所有图片调节亮度，并复制一份label文件，r指定亮化值
-def changeLight(self,r=None):
-
-#对VOC数据集的所有图片添加高斯噪音，并复制一份label文件
-def addNoise(self):
-    
-#对VOC数据集进行HVS调整
-def changeHsv(self,hub=.1, sat=.1, val=.1):
+```shell
+python Augment_scrict.py --changeLight=True --root=./TestData/VOC
 ```
 
-小示例：
+**高斯噪点**
 
-```python
-if __name__ == '__main__':
-    start = time.time()
-    V = DataAugmentVOC(rootpath=r'.\TestDate\VOC')
-    V.changeHsv(hub=30,sat=1.2, val=1.2)  #hub 0~180   sat 0~2   val 0~2
-    V.addNoise()
-    V.changeLight()
-    V.rotate(angle=15)
-    V.filp(filp=1)
-    end =time.time()
-    print("total of {}".format(end-start))
+```
+python Augment_scrict.py --Noise=True --root=./TestData/VOC
 ```
 
-![image](./show_picture/71.jpg)
+**旋转指定角度**
+
+```
+python Augment_scrict.py --rotate=10 --root=./TestData/VOC
+```
+
+**水平翻转**
+
+```
+python Augment_scrict.py --filp=True --root=./TestData/VOC
+```
+
+**结果展示：![75](E:\云\typora文档\文档图片集\75.jpg)**
