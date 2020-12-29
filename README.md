@@ -81,4 +81,6 @@ python Augment_scrict.py --rotate=10 --root=./TestData/VOC
 python Augment_scrict.py --filp=True --root=./TestData/VOC
 ```
 
-**结果展示：![75](E:\云\typora文档\文档图片集\75.jpg)**
+**结果展示：**
+
+![75](.\show_picture\75.jpg)
