@@ -83,4 +83,4 @@ python Augment_scrict.py --filp=True --root=./TestData/VOC
 
 **结果展示：**
 
-![75](.\show_picture\75.jpg)
+![image](./show_picture/75.jpg)
