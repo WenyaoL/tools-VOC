@@ -4,9 +4,9 @@ from tqdm import tqdm
 def parse_args():
     parser = argparse.ArgumentParser(description='rename for picture')
     parser.add_argument('--root', dest='root_path', help='dataset root path',
-                        type=str)
+                        type=str, required=True)
     parser.add_argument('--n', dest='num', help='位数',
-                        type=int)
+                        type=int, required=True)
     args = parser.parse_args()
     return args
 

@@ -9,8 +9,8 @@ def parse_args():
     parser.add_argument('--trainval', type=float, default=0.9)
     parser.add_argument('--train', type=int, default=0.7)
 
-    parser.add_argument('--xmlfilepath', type=str, default=r'..\..\TestDate\VOC\Annotations')
-    parser.add_argument('--txtsavepath', type=str, default=r'..\..\TestDate\VOC\ImageSets\Main')
+    parser.add_argument('--xmlfilepath', type=str, required=True)
+    parser.add_argument('--txtsavepath', type=str, required=True)
 
 
     return parser.parse_known_args()

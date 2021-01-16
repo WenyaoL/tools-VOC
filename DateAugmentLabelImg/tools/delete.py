@@ -6,20 +6,18 @@ from tqdm import tqdm
 '''
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--imgpath', type=str)
-    parser.add_argument('--xmlpath', type=str)
+    parser.add_argument('--imgpath', type=str, required=True)
+    parser.add_argument('--xmlpath', type=str, required=True)
     return parser.parse_known_args()
 
 if __name__ == '__main__':
     args,_ = parse_args()
-    path1 = args.xmlpath      #对比的文件夹（标签文件夹）
-    path2 = args.imgpath       #删除文件的文件夹（图片文件夹）
-    filelist1 = os.listdir(path1) #该文件夹下所有的文件（包括文件夹）
-    filelist2 = os.listdir(path2)
+    xmllist = os.listdir(args.xmlpath) #该文件夹下所有的文件（包括文件夹）
+    imglist = os.listdir(args.imgpath)
     tp = ".xml"      #要匹配标签文件的后缀
 
 
-    for file2 in tqdm(filelist2):
-        filename = os.path.splitext(file2)[0] + tp  # 匹配文件名
-        if filename not in filelist1:           #如果没有对应匹配文件，就删除
-            os.remove(os.path.join(path2,file2))
+    for imgname in tqdm(imglist):
+        filename = os.path.splitext(imgname)[0] + tp  # 匹配文件名
+        if filename not in xmllist:           #如果没有对应匹配文件，就删除
+            os.remove(os.path.join(args.imgpath,imgname))

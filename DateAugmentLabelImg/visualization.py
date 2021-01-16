@@ -10,12 +10,13 @@ from tqdm import tqdm
 #image_path=r".\TestDate\VOC\change_JPEGImages"
 #annotation_path=r".\TestDate\VOC\change_Annotations"
 #save_path =r'.\TestDate\VOC\vision2'
-image_path=r"F:\alldate\test1\SHONG\JPEGImages"
-annotation_path=r"F:\alldate\test1\SHONG\Annotations"
-save_path =r'F:\alldate\test1\SHONG\vision'
+image_path=r"F:\python_workplace\tools-VOC\TestData\VOC\change_JPEGImages"
+annotation_path=r"F:\python_workplace\tools-VOC\TestData\VOC\Annotations"
+save_path =r'F:\python_workplace\tools-VOC\TestData\VOC\vision'
 
 img_names = os.listdir(image_path)
 xml_names = os.listdir(annotation_path)
+
 for img_n, xml_n in tqdm(zip(img_names, xml_names)):
     img_path =os.path.join(image_path, img_n)
     xml_path =os.path.join(annotation_path,xml_n)

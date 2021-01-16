@@ -4,6 +4,9 @@ import os
 import cv2
 import time
 from tqdm import tqdm
+from concurrent.futures import ThreadPoolExecutor,wait
+
+
 
 
 class DataAugmentVOC:
@@ -39,6 +42,40 @@ class DataAugmentVOC:
     def _getXMLPathlist(self):
         return [os.path.join(self.Xmlpath,xml) for xml in os.listdir(self.Xmlpath)]
 
+    def _call(self, imgcallback,xmlcallback, **kwargs):
+
+        def imgoperate(callback, **kwargs):
+            filename = kwargs.pop('filename')
+            count = 0
+            for img in tqdm(self.ImgPathlist):
+                count += 1
+                self.imgP.setImg(img)
+                path = os.path.join(self.save_imgpath,filename + str(count) + ".jpg")
+
+                cv2.imwrite(path,
+                            callback(**kwargs['imgconfig']),
+                            [int(cv2.IMWRITE_JPEG_QUALITY), 95]
+                            )
+
+        def xmlorerate(callback,**kwargs):
+            filename = kwargs.pop('filename')
+            count = 0
+            for xml in tqdm(self.XMLPathlist):
+                count += 1
+                self.labP.setXML(xml)
+                kwargs['xmlconfig']['save_path'] = os.path.join(self.save_xmlpath, filename+str(count)+".xml")
+                callback(**kwargs['xmlconfig'])
+
+
+        executor = ThreadPoolExecutor(max_workers=2)
+        f_list = []
+        f1 = executor.submit(imgoperate,imgcallback,**kwargs)
+        f2 = executor.submit(xmlorerate,xmlcallback,**kwargs)
+        f_list.append(f1)
+        f_list.append(f2)
+        wait(f_list)
+
+
     def setSave_xmlpath(self,path):
         self.save_xmlpath = path
 
@@ -50,19 +87,13 @@ class DataAugmentVOC:
             对VOC数据集的所有图片添加高斯噪音，并复制一份label文件
         :return:
         '''
-        start = time.time()
-        count = 0
-        for img, xml in tqdm(zip(self.ImgPathlist, self.XMLPathlist)):
-            count +=1
-            self.imgP.setImg(img)
-            cv2.imwrite(self.save_imgpath+"\\noise_"+str(count)+".jpg",
-                        self.imgP.addNoise_Img(),
-                        [int(cv2.IMWRITE_JPEG_QUALITY), 95]
-                        )
-            self.labP.setXML(xml)
-            self.labP.copyXML(save_path=self.save_xmlpath,newname="noise_"+str(count)+".xml")
-        end = time.time()
-        print('A total of {} noise images are generated,a total of {}s'.format(str(count),end-start))
+        # 呼叫_call方法多线程执行
+        self._call(imgcallback= self.imgP.addNoise_Img,
+                   xmlcallback= self.labP.copyXML,
+                   filename="noise_",
+                   imgconfig={},
+                   xmlconfig={}
+                   )
 
     def changeLight(self,r=None):
         '''
@@ -71,22 +102,15 @@ class DataAugmentVOC:
         :return:
         '''
 
-        start = time.time()
-        count = 0
-        for img, xml in tqdm(zip(self.ImgPathlist, self.XMLPathlist)):
-            count +=1
-            self.imgP.setImg(img)
-            cv2.imwrite(self.save_imgpath+"\\change_light_"+str(count)+".jpg",
-                        self.imgP.changeLight_Img(r=r),
-                        [int(cv2.IMWRITE_JPEG_QUALITY), 95]
-                        )
-
-            self.labP.setXML(xml)
-            self.labP.copyXML(self.save_xmlpath,
-                              "change_light_"+str(count)+".xml"
-                              )
-        end = time.time()
-        print('A total of {} changeLight images are generated,a total of {}s'.format(str(count),end-start))
+        #呼叫_call方法多线程执行
+        self._call(imgcallback=self.imgP.changeLight_Img,
+                   xmlcallback=self.labP.copyXML,
+                   filename="changeLight_",
+                   imgconfig={
+                       'r': r
+                   },
+                   xmlconfig={}
+                   )
 
     def changeHsv(self,hub=.1, sat=.1, val=.1):
         '''
@@ -96,21 +120,17 @@ class DataAugmentVOC:
             :param val_mult:明度变化比例
             :return:
         '''
-        start = time.time()
-        count = 0
-        for img, xml in tqdm(zip(self.ImgPathlist, self.XMLPathlist)):
-            count += 1
-            self.imgP.setImg(img)
-            cv2.imwrite(self.save_imgpath + "\\change_hvs_" + str(count) + ".jpg",
-                        self.imgP.hsv_transform(hue_delta=hub, sat_mult=sat, val_mult=val),
-                        [int(cv2.IMWRITE_JPEG_QUALITY), 95]
-                        )
-            self.labP.setXML(xml)
-            self.labP.copyXML(self.save_xmlpath,
-                              "change_hvs_" + str(count) + ".xml"
-                              )
-        end = time.time()
-        print('A total of {} changeHvs images are generated,a total of {}s'.format(str(count), end - start))
+        # 呼叫_call方法多线程执行
+        self._call(imgcallback=self.imgP.hsv_transform,
+                   xmlcallback=self.labP.copyXML,
+                   filename="changeHsv_",
+                   imgconfig={
+                       'hue_delta' : hub,
+                       'sat_mult' : sat,
+                       'val_mult' : val
+                   },
+                   xmlconfig={}
+                   )
 
     def rotate(self,angle=5, scale=1.):
         '''
@@ -149,20 +169,13 @@ class DataAugmentVOC:
         :param filp:
         :return:
         '''
-        start = time.time()
-        count = 0
-        for img, xml in tqdm(zip(self.ImgPathlist, self.XMLPathlist)):
-            count += 1
-            self.imgP.setImg(img)
-            self.labP.setXML(xml)
-            filp_img = self.imgP.filp_img(filp=filp)
-            cv2.imwrite(self.save_imgpath + "\\filp_" + str(count) + ".jpg",
-                        filp_img,
-                        [int(cv2.IMWRITE_JPEG_QUALITY), 95]
-                        )
-            self.labP.reverse_Object(filp=filp, save_path=self.save_xmlpath + "\\filp_" + str(count) + ".xml")
-        end = time.time()
-        print('A total of {} filp images are generated,a total of {}s'.format(str(count),end-start))
+        # 呼叫_call方法多线程执行
+        self._call(imgcallback=self.imgP.filp_img,
+                   xmlcallback=self.labP.reverse_Object,
+                   filename="filp_",
+                   imgconfig={'filp':1},
+                   xmlconfig={'filp':1}
+                   )
 
 if __name__ == '__main__':
     start = time.time()

@@ -4,9 +4,9 @@ from tqdm import tqdm
 def parse_args():
     parser = argparse.ArgumentParser(description='rename for picture')
     parser.add_argument('--root', dest='root_path', help='dataset root path',
-                        type=str)
-    parser.add_argument('--clear_suffix', dest='clear_suffix', help='清洗符合后缀名的图片',
-                        type=str)
+                        type=str, required=True)
+    parser.add_argument('--clear_suffix', dest='clear_suffix', help='清洗符合后缀名的文件',
+                        type=str, required=True)
     args = parser.parse_args()
     return args
 
@@ -20,4 +20,4 @@ if __name__ == '__main__':
         if filename.split('.')[-1] == args.clear_suffix:
             os.remove(filename)
             count+=1
-    print('总共删除%d张图片' % count)
+    print('总共删除%d个文件' % count)

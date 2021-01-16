@@ -74,7 +74,7 @@ class LabelParser:
 
         self.tree.write(save_path, encoding="utf-8", xml_declaration=True)
 
-    def rotate_Object(self, rot_mat,w,h,c,save_path =None, folder_name=None):
+    def rotate_Object(self, rot_mat,w,h,c,save_path =None):
         '''
             根据仿射变换矩阵来对对象标签进行转换,
             默认保存路径为原文件，也可以指定新的
@@ -127,17 +127,14 @@ class LabelParser:
 
 
 
-    def copyXML(self, save_path=None, newname=None):
+    def copyXML(self, save_path=None):
         '''
             复制当前XML文件到指定的新目录下
 
         :param save_path: 保存文件或目录的路径
-        :param newname: 文件的新名字
         :return:
         '''
 
-        if os.path.isdir(save_path):
-            save_path = os.path.join(save_path, newname)
 
         path = self.root.find('path')
         if path is not None:

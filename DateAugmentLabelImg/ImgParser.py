@@ -155,18 +155,33 @@ class ImgParser:
         return shift_img
 
 
+    def resize_Img(self,x,y,img=None):
+        '''
+            resize 图片
+        :param x: resize x
+        :param y: resize y
+        :param img: 指定新的平移图像
+        :return:
+        '''
+        if img is None:
+            img =self.img
+        # ---------------------- resize图像 ----------------------
+        resize_img = cv2.resize(img, dsize=(x, y), interpolation=cv2.INTER_NEAREST)
+
+        return resize_img
+
 
 if __name__ == '__main__':
     #I =ImgParser(r'.\TestDate\Images\0001.jpg')
     I = ImgParser()
-    I.setImg(r'.\TestDate\Images\000004.jpg')
+    I.setImg(r'F:\python_workplace\tools-VOC\TestData\Images\000004.jpg')
     img5, _ =I.rotate_Img()
     img = [I.addNoise_Img()/255,
            I.changeLight_Img(),
            I.filp_img(),
            I.shift_Img(50,50),
            img5,
-           I.hsv_transform(hue_delta=30, sat_mult=1.2, val_mult=1.2)]
+           I.hsv_transform(hue_delta=15, sat_mult=1.2, val_mult=1.2)]
 
     pic = ['noise', 'changeLight', 'filp', 'shift','rotate','changeHvs']
     plt.figure(figsize=(8,6))
