@@ -157,8 +157,7 @@ class DataAugmentVOC:
                                     w=rot_img.shape[0],
                                     h=rot_img.shape[1],
                                     c=rot_img.shape[2],
-                                    save_path = self.save_xmlpath + "\\rotate_" + str(count) + ".xml",
-                                    folder_name='VOC'
+                                    save_path = self.save_xmlpath + "\\rotate_" + str(count) + ".xml"
                                     )
         end = time.time()
         print('A total of {} change_rotate images are generated,a total of {}s'.format(str(count),end-start))
