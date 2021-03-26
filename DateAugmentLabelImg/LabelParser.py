@@ -60,8 +60,11 @@ class LabelParser:
             xmin = self.root.findall('.//bndbox/xmin')
             xmax = self.root.findall('.//bndbox/xmax')
             for index in range(len(xmin)):
-                xmin[index].text = str(int(width.text) - int(xmin[index].text))
-                xmax[index].text = str(int(width.text) - int(xmax[index].text))
+                #转换后相对大小发生改变
+                max = str(int(width.text) - int(xmin[index].text))
+                min = str(int(width.text) - int(xmax[index].text))
+                xmax[index].text = max
+                xmin[index].text = min
 
 
         if filp==0:
@@ -69,8 +72,10 @@ class LabelParser:
             ymin = self.root.findall('.//bndbox/ymin')
             ymax = self.root.findall('.//bndbox/ymax')
             for index in range(len(ymin)):
-                ymin[index].text = str(int(height.text) - int(ymin[index].text))
-                ymax[index].text = str(int(height.text) - int(ymax[index].text))
+                max = str(int(height.text) - int(ymin[index].text))
+                min = str(int(height.text) - int(ymax[index].text))
+                ymax[index].text = max
+                ymin[index].text = min
 
         self.tree.write(save_path, encoding="utf-8", xml_declaration=True)
 
