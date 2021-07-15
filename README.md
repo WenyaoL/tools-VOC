@@ -21,13 +21,13 @@ README.md
 #### 3.1获取帮助
 
 ```
-python Augment_scripy.py -h
+python Augment_script.py -h
 ```
 
 显示结果：
 
 ```
-usage: Augment_scripy.py [-h] [--root ROOT_PATH] [--xmlpath XMLPATH]
+usage: Augment_script.py [-h] [--root ROOT_PATH] [--xmlpath XMLPATH]
                          [--imgpath IMGPATH] [--hub HUB] [--sat SAT]
                          [--val VAL] [--rotate ROTATE] [--Noise NOISE]
                          [--changeLight CHANGELIGHT] [--filp FILP]
@@ -54,31 +54,31 @@ optional arguments:
 **hvs调节**
 
 ```shell
-python Augment_scripy.py --hub=30 --sat=1.2 --val=1.2  --root=./TestData/VOC
+python Augment_script.py --hub=30 --sat=1.2 --val=1.2  --root=./TestData/VOC
 ```
 
 **随机亮度调节**
 
 ```shell
-python Augment_scripy.py --changeLight=True --root=./TestData/VOC
+python Augment_script.py --changeLight=True --root=./TestData/VOC
 ```
 
 **高斯噪点**
 
 ```
-python Augment_scripy.py --Noise=True --root=./TestData/VOC
+python Augment_script.py --Noise=True --root=./TestData/VOC
 ```
 
 **旋转指定角度**
 
 ```
-python Augment_scripy.py --rotate=10 --root=./TestData/VOC
+python Augment_script.py --rotate=10 --root=./TestData/VOC
 ```
 
 **水平翻转**
 
 ```
-python Augment_scripy.py --filp=True --root=./TestData/VOC
+python Augment_script.py --filp=True --root=./TestData/VOC
 ```
 
 **结果展示：**
