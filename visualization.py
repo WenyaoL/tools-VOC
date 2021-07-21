@@ -4,12 +4,6 @@ import  xml.dom.minidom
 import argparse
 from tqdm import tqdm
 
-'''
-    脚本来自：https://blog.csdn.net/ptgood/article/details/86997486
-    在此基础上做了些bug的修复
-'''
-
-
 def parse_args():
     parser = argparse.ArgumentParser(description='对图片进行可视化')
     parser.add_argument('--img', help='图片路径',required=True,
