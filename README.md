@@ -84,3 +84,11 @@ python Augment_script.py --filp=True --root=./TestData/VOC
 **结果展示：**
 
 ![image](./show_picture/75.jpg)
+
+#### 3.3可视测试
+**使用visualization脚本**
+
+查看使用参数，具体效果可以查看TestData/VOC目录下的vis_img文件夹
+```
+python visualization.py  -h
+```
