@@ -109,10 +109,11 @@ class LabelParser:
         ymaxs = self.root.findall('object/bndbox//ymax')
         for x_min, y_min, x_max, y_max in zip(xmins, ymins, xmaxs, ymaxs):
             #转换
-            xmin = int(x_min.text)
-            ymin = int(y_min.text)
-            xmax = int(x_max.text)
-            ymax = int(y_max.text)
+            xmin = int(float(x_min.text))
+            ymin = int(float(y_min.text))
+            xmax = int(float(x_max.text))
+            ymax = int(float(y_max.text))
+            
             # point1 = np.dot(rot_mat, np.array([xmin, ymin, 1]))          #这种新画出的框大一圈
             # point2 = np.dot(rot_mat, np.array([xmax, ymin, 1]))
             # point3 = np.dot(rot_mat, np.array([xmax, ymax, 1]))
@@ -127,6 +128,7 @@ class LabelParser:
             # point2 = np.dot(rot_mat, np.array([xmax, (ymin + ymax) / 2, 1]))  #这种会紧凑很多，不过网上大部分实现都是这种
             # point3 = np.dot(rot_mat, np.array([(xmin + xmax) / 2, ymax, 1]))
             # point4 = np.dot(rot_mat, np.array([xmin, (ymin + ymax) / 2, 1]))
+            
             # 合并np.array
             concat = np.vstack((point1, point2, point3, point4))
             # 改变array类型

@@ -22,6 +22,7 @@ if __name__ == '__main__':
     xmlfilepath = args.xmlfilepath  # 标注文件的路径 ，格式为.xml的
     txtsavepath = args.txtsavepath  # 生成的各个txt存放的路径
     total_xml = os.listdir(xmlfilepath)
+    total_xml.sort()
     print(total_xml)
     num = len(total_xml)
     list = range(num)

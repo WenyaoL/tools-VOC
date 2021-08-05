@@ -14,6 +14,9 @@ if __name__ == '__main__':
     args,_ = parse_args()
     xmllist = os.listdir(args.xmlpath) #该文件夹下所有的文件（包括文件夹）
     imglist = os.listdir(args.imgpath)
+    xmllist.sort()
+    imglist.sort()
+
     tp = ".xml"      #要匹配标签文件的后缀
 
 

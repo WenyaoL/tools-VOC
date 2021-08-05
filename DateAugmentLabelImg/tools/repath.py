@@ -17,6 +17,7 @@ def parse_args():
 if __name__ == '__main__':
     args = parse_args()
     fileList = os.listdir(args.xmlpath)
+    fileList.sort()
     if args.store == None:
         StoreDir=args.xmlpath       #存储目录
     else:

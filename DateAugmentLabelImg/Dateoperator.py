@@ -25,16 +25,20 @@ class DataOperator:
 
 
     def _getImgPathlist(self):
-        return [os.path.join(self.Imgpath,img) for img in os.listdir(self.Imgpath)]
+        sorted_list = os.listdir(self.Imgpath)
+        return [os.path.join(self.Imgpath,img) for img in sorted(sorted_list)]
 
     def _getXMLPathlist(self):
-        return [os.path.join(self.Xmlpath,xml) for xml in os.listdir(self.Xmlpath)]
+        sorted_list = os.listdir(self.Xmlpath)
+        return [os.path.join(self.Xmlpath,xml) for xml in sorted(sorted_list)]
 
     def _getImgName(self):
-        return [img for img in os.listdir(self.Imgpath)]
+        sorted_list = os.listdir(self.Imgpath)
+        return [img for img in sorted(sorted_list)]
 
     def _getXmlName(self):
-        return [xml for xml in os.listdir(self.Xmlpath)]
+        sorted_list = os.listdir(self.Xmlpath)
+        return [xml for xml in sorted(sorted_list)]
 
     def resize_dataset(self,*args):
         width = args[0]

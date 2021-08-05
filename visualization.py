@@ -27,7 +27,8 @@ if __name__ == '__main__':
     if not os.path.exists(save_path):
         os.makedirs(save_path)
     save_path = os.path.join(save_path, "vis_img")
-    os.mkdir(save_path)
+    if not os.path.exists(save_path):
+        os.mkdir(save_path)
 
     for img_n, xml_n in tqdm(zip(img_names, xml_names)):
         img_path =os.path.join(image_path, img_n)
@@ -47,10 +48,10 @@ if __name__ == '__main__':
             ymin = bndbox.getElementsByTagName('ymin')[0]
             xmax = bndbox.getElementsByTagName('xmax')[0]
             ymax = bndbox.getElementsByTagName('ymax')[0]
-            xmin_data=int(xmin.childNodes[0].data)
-            ymin_data=int(ymin.childNodes[0].data)
-            xmax_data=int(xmax.childNodes[0].data)
-            ymax_data=int(ymax.childNodes[0].data)
+            xmin_data=int(float(xmin.childNodes[0].data))
+            ymin_data=int(float(ymin.childNodes[0].data))
+            xmax_data=int(float(xmax.childNodes[0].data))
+            ymax_data=int(float(ymax.childNodes[0].data))
             label_name=object.getElementsByTagName('name')[0].childNodes[0].data
             cv2.rectangle(img,(xmin_data,ymin_data),(xmax_data,ymax_data),(55,255,155),1)
             cv2.putText(img,label_name,(xmin_data,ymin_data),cv2.FONT_HERSHEY_SIMPLEX,1,(0,255,0),1)
