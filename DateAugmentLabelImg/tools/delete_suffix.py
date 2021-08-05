@@ -15,6 +15,7 @@ if __name__ == '__main__':
     Dir = args.root_path
     count=0
     fileList = os.listdir(Dir)
+    fileList.sort()
     os.chdir(Dir)
     for filename in tqdm(fileList):
         if filename.split('.')[-1] == args.clear_suffix:

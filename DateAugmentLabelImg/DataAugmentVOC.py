@@ -21,7 +21,7 @@ class DataAugmentVOC:
         self.imgP = ImgP.ImgParser()    #图片解析器
         self.labP = LabelP.LabelParser()    #标签解析器
 
-        self.save_xmlpath = os.path.join(rootpath,"change_Annotations")
+        self.save_xmlpath = os.path.join(rootpath, "change_Annotations")
         self.save_imgpath = os.path.join(rootpath, "change_JPEGImages")
 
         if not os.path.exists(self.save_imgpath):
@@ -33,14 +33,18 @@ class DataAugmentVOC:
         self.XMLPathlist = self._getXMLPathlist()
 
     def _getImg(self):
-        return os.listdir(self.Imgpath)
+        sorted_list = os.listdir(self.Imgpath)
+        return sorted(sorted_list)
     def _getImgPathlist(self):
-        return [os.path.join(self.Imgpath,img) for img in os.listdir(self.Imgpath)]
+        sorted_list = os.listdir(self.Imgpath)
+        return [os.path.join(self.Imgpath,img) for img in sorted(sorted_list)]
 
     def _getXML(self):
-        return os.listdir(self.Xmlpath)
+        sorted_list = os.listdir(self.Xmlpath)
+        return sorted(sorted_list)
     def _getXMLPathlist(self):
-        return [os.path.join(self.Xmlpath,xml) for xml in os.listdir(self.Xmlpath)]
+        sorted_list = os.listdir(self.Xmlpath)
+        return [os.path.join(self.Xmlpath,xml) for xml in sorted(sorted_list)]
 
     def _call(self, imgcallback,xmlcallback, **kwargs):
 
@@ -148,16 +152,15 @@ class DataAugmentVOC:
             self.labP.setXML(xml)
             rot_img, rot_mat = self.imgP.rotate_Img(angle=angle, scale=scale)
 
-            cv2.imwrite(self.save_imgpath + "\\rotate_" + str(count) + ".jpg",
+            cv2.imwrite(os.path.join(self.save_imgpath, "rotate_" + str(count) + ".jpg"),
                         rot_img,
                         [int(cv2.IMWRITE_JPEG_QUALITY), 95]
                         )
-
             self.labP.rotate_Object(rot_mat,
                                     w=rot_img.shape[0],
                                     h=rot_img.shape[1],
                                     c=rot_img.shape[2],
-                                    save_path = self.save_xmlpath + "\\rotate_" + str(count) + ".xml"
+                                    save_path=os.path.join(self.save_xmlpath, "rotate_" + str(count) + ".xml")
                                     )
         end = time.time()
         print('A total of {} change_rotate images are generated,a total of {}s'.format(str(count),end-start))

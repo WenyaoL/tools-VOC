@@ -109,10 +109,10 @@ class LabelParser:
         ymaxs = self.root.findall('object/bndbox//ymax')
         for x_min, y_min, x_max, y_max in zip(xmins, ymins, xmaxs, ymaxs):
             #转换
-            xmin = int(x_min.text)
-            ymin = int(y_min.text)
-            xmax = int(x_max.text)
-            ymax = int(y_max.text)
+            xmin = int(float(x_min.text))
+            ymin = int(float(y_min.text))
+            xmax = int(float(x_max.text))
+            ymax = int(float(y_max.text))
             point1 = np.dot(rot_mat, np.array([(xmin + xmax) / 2, ymin, 1]))
             point2 = np.dot(rot_mat, np.array([xmax, (ymin + ymax) / 2, 1]))
             point3 = np.dot(rot_mat, np.array([(xmin + xmax) / 2, ymax, 1]))
