@@ -113,10 +113,22 @@ class LabelParser:
             ymin = int(float(y_min.text))
             xmax = int(float(x_max.text))
             ymax = int(float(y_max.text))
-            point1 = np.dot(rot_mat, np.array([(xmin + xmax) / 2, ymin, 1]))
-            point2 = np.dot(rot_mat, np.array([xmax, (ymin + ymax) / 2, 1]))
-            point3 = np.dot(rot_mat, np.array([(xmin + xmax) / 2, ymax, 1]))
-            point4 = np.dot(rot_mat, np.array([xmin, (ymin + ymax) / 2, 1]))
+            
+            # point1 = np.dot(rot_mat, np.array([xmin, ymin, 1]))          #这种新画出的框大一圈
+            # point2 = np.dot(rot_mat, np.array([xmax, ymin, 1]))
+            # point3 = np.dot(rot_mat, np.array([xmax, ymax, 1]))
+            # point4 = np.dot(rot_mat, np.array([xmin, ymax, 1]))
+
+            point1 = np.dot(rot_mat, np.array([xmin + (xmax-xmin) / 4, ymin, 1]))  # 去两者之间
+            point2 = np.dot(rot_mat, np.array([xmax, ymin + (ymax-ymin) / 4, 1]))
+            point3 = np.dot(rot_mat, np.array([xmax - (xmax-xmin) / 4, ymax, 1]))
+            point4 = np.dot(rot_mat, np.array([xmin, ymax - (ymax-ymin) / 4, 1]))
+
+            # point1 = np.dot(rot_mat, np.array([(xmin + xmax) / 2, ymin, 1]))  # 获取原始矩形的四个中点，然后将这四个点转换到旋转后的坐标系下
+            # point2 = np.dot(rot_mat, np.array([xmax, (ymin + ymax) / 2, 1]))  #这种会紧凑很多，不过网上大部分实现都是这种
+            # point3 = np.dot(rot_mat, np.array([(xmin + xmax) / 2, ymax, 1]))
+            # point4 = np.dot(rot_mat, np.array([xmin, (ymin + ymax) / 2, 1]))
+            
             # 合并np.array
             concat = np.vstack((point1, point2, point3, point4))
             # 改变array类型
