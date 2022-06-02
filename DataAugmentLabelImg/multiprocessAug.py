@@ -1,4 +1,4 @@
-from DateAugmentLabelImg.DataAugmentVOC import DataAugmentVOC
+from DataAugmentLabelImg.DataAugmentVOC import DataAugmentVOC
 from concurrent.futures import ProcessPoolExecutor,wait
 
 def multiprocessAug(args):

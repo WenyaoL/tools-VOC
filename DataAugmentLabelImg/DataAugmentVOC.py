@@ -1,5 +1,5 @@
-import DateAugmentLabelImg.ImgParser as ImgP
-import DateAugmentLabelImg.LabelParser as LabelP
+import DataAugmentLabelImg.ImgParser as ImgP
+import DataAugmentLabelImg.LabelParser as LabelP
 import os
 import cv2
 import time
@@ -29,55 +29,67 @@ class DataAugmentVOC:
         if not os.path.exists(self.save_xmlpath):
             os.mkdir(self.save_xmlpath)
 
-        self.ImgPathlist = self._getImgPathlist()
-        self.XMLPathlist = self._getXMLPathlist()
+        #图片和标签文件的list
+        self.sourceMap = self._getSourceMap()
 
-    def _getImg(self):
-        sorted_list = os.listdir(self.Imgpath)
-        return sorted(sorted_list)
-    def _getImgPathlist(self):
-        sorted_list = os.listdir(self.Imgpath)
-        return [os.path.join(self.Imgpath,img) for img in sorted(sorted_list)]
 
-    def _getXML(self):
-        sorted_list = os.listdir(self.Xmlpath)
-        return sorted(sorted_list)
-    def _getXMLPathlist(self):
-        sorted_list = os.listdir(self.Xmlpath)
-        return [os.path.join(self.Xmlpath,xml) for xml in sorted(sorted_list)]
 
-    def _call(self, imgcallback,xmlcallback, **kwargs):
+
+    def _getSourceMap(self):
+
+        #求文件名和后缀
+        img_dict = dict([os.path.splitext(img_name) for img_name in os.listdir(self.Imgpath)])
+        xml_dict = dict([os.path.splitext(xml_name) for xml_name in os.listdir(self.Xmlpath)])
+        #求文件名交集,
+        u_list = list(set(img_dict.keys()).intersection(set(xml_dict.keys())))
+
+        #拼接成文件名
+        img_list = [name+img_dict[name] for name in sorted(u_list)]
+        xml_list = [name+xml_dict[name] for name in sorted(u_list)]
+        return list(zip(img_list,xml_list))
+
+
+    def _call(self, **kwargs):
 
         def imgoperate(callback, **kwargs):
-            filename = kwargs.pop('filename')
-            count = 0
-            for img in tqdm(self.ImgPathlist):
-                count += 1
-                self.imgP.setImg(img)
-                path = os.path.join(self.save_imgpath,filename + str(count) + ".jpg")
+            prefix = kwargs['prefix']
+            for img,_ in tqdm(self.sourceMap):
+                #图片路径
+                img_path = os.path.join(self.Imgpath,img)
+                self.imgP.setImg(img_path)
 
-                cv2.imwrite(path,
+                #保存图片路径
+                save_path = os.path.join(self.save_imgpath,prefix + img)
+                #增强
+                cv2.imwrite(save_path,
                             callback(**kwargs['imgconfig']),
                             [int(cv2.IMWRITE_JPEG_QUALITY), 95]
                             )
 
         def xmlorerate(callback,**kwargs):
-            filename = kwargs.pop('filename')
-            count = 0
-            for xml in tqdm(self.XMLPathlist):
-                count += 1
-                self.labP.setXML(xml)
-                kwargs['xmlconfig']['save_path'] = os.path.join(self.save_xmlpath, filename+str(count)+".xml")
+            prefix = kwargs['prefix']
+
+            for _,xml in tqdm(self.sourceMap):
+                # 标签路径
+                xml_path = os.path.join(self.Xmlpath, xml)
+                self.labP.setXML(xml_path)
+
+                #设置标签保存路径
+                kwargs['xmlconfig']['save_path'] = os.path.join(self.save_xmlpath, prefix+xml)
                 callback(**kwargs['xmlconfig'])
 
 
         executor = ThreadPoolExecutor(max_workers=2)
         f_list = []
-        f1 = executor.submit(imgoperate,imgcallback,**kwargs)
-        f2 = executor.submit(xmlorerate,xmlcallback,**kwargs)
+        f1 = executor.submit(imgoperate,kwargs['imgcallback'],**kwargs)
+        f2 = executor.submit(xmlorerate,kwargs['xmlcallback'],**kwargs)
         f_list.append(f1)
         f_list.append(f2)
+
+        #两线程都结束
         wait(f_list)
+
+
 
 
     def setSave_xmlpath(self,path):
@@ -94,7 +106,7 @@ class DataAugmentVOC:
         # 呼叫_call方法多线程执行
         self._call(imgcallback= self.imgP.addNoise_Img,
                    xmlcallback= self.labP.copyXML,
-                   filename="noise_",
+                   prefix="noise_",
                    imgconfig={},
                    xmlconfig={}
                    )
@@ -109,7 +121,7 @@ class DataAugmentVOC:
         #呼叫_call方法多线程执行
         self._call(imgcallback=self.imgP.changeLight_Img,
                    xmlcallback=self.labP.copyXML,
-                   filename="changeLight_",
+                   prefix="changeLight_",
                    imgconfig={
                        'r': r
                    },
@@ -127,7 +139,7 @@ class DataAugmentVOC:
         # 呼叫_call方法多线程执行
         self._call(imgcallback=self.imgP.hsv_transform,
                    xmlcallback=self.labP.copyXML,
-                   filename="changeHsv_",
+                   prefix="changeHsv_",
                    imgconfig={
                        'hue_delta' : hub,
                        'sat_mult' : sat,
@@ -145,14 +157,17 @@ class DataAugmentVOC:
         :return:
         '''
         start = time.time()
-        count = 0
-        for img, xml in tqdm(zip(self.ImgPathlist, self.XMLPathlist)):
-            count += 1
-            self.imgP.setImg(img)
-            self.labP.setXML(xml)
+
+        for img, xml in tqdm(self.sourceMap):
+            #图片和标签路径
+            img_path = os.path.join(self.Imgpath,img)
+            xml_path = os.path.join(self.Xmlpath,xml)
+            #设置
+            self.imgP.setImg(img_path)
+            self.labP.setXML(xml_path)
             rot_img, rot_mat = self.imgP.rotate_Img(angle=angle, scale=scale)
 
-            cv2.imwrite(os.path.join(self.save_imgpath, "rotate_" + str(count) + ".jpg"),
+            cv2.imwrite(os.path.join(self.save_imgpath, "rotate_"+img),
                         rot_img,
                         [int(cv2.IMWRITE_JPEG_QUALITY), 95]
                         )
@@ -160,10 +175,10 @@ class DataAugmentVOC:
                                     w=rot_img.shape[0],
                                     h=rot_img.shape[1],
                                     c=rot_img.shape[2],
-                                    save_path=os.path.join(self.save_xmlpath, "rotate_" + str(count) + ".xml")
+                                    save_path=os.path.join(self.save_xmlpath, "rotate_"+xml)
                                     )
         end = time.time()
-        print('A total of {} change_rotate images are generated,a total of {}s'.format(str(count),end-start))
+
 
     def filp(self,filp=1):
         '''
@@ -174,14 +189,15 @@ class DataAugmentVOC:
         # 呼叫_call方法多线程执行
         self._call(imgcallback=self.imgP.filp_img,
                    xmlcallback=self.labP.reverse_Object,
-                   filename="filp_",
+                   prefix="filp_",
                    imgconfig={'filp':1},
                    xmlconfig={'filp':1}
                    )
 
+
 if __name__ == '__main__':
     start = time.time()
-    V = DataAugmentVOC(rootpath=r'.\TestDate\VOC')
+    V = DataAugmentVOC(rootpath=r'..\TestData\VOC')
 
     #V.setSave_imgpath(r'.\TestDate\VOC\JPEGImages')
     #V.setSave_xmlpath(r'.\TestDate\VOC\Annotations')

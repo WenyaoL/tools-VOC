@@ -1,5 +1,5 @@
-from DateAugmentLabelImg.DataAugmentVOC import DataAugmentVOC
-from DateAugmentLabelImg.multiprocessAug import multiprocessAug
+from DataAugmentLabelImg.DataAugmentVOC import DataAugmentVOC
+from DataAugmentLabelImg.multiprocessAug import multiprocessAug
 import argparse
 def parse_args():
     parser = argparse.ArgumentParser(description='aug dataset')
@@ -17,24 +17,23 @@ def parse_args():
                         type=float)
     parser.add_argument('--rotate', dest='rotate', help='旋转角度',
                         type=int)
-    parser.add_argument('--Noise', dest='Noise', help='添加高斯噪音', default=False,
-                        type=bool)
-    parser.add_argument('--changeLight', dest='changeLight', help='随机光度调节', default=False,
-                        type=bool)
-    parser.add_argument('--filp', dest='filp', help='水平翻转', default=False,
-                        type=bool)
-    parser.add_argument('--mul_processs', dest='mul_processs', help='启用多进程处理', default=True,
-                        type=bool)
+
+    #枚举参试，出现代表true，否则代表false
+    parser.add_argument('--Noise', action="store_true", help='添加高斯噪音')
+    parser.add_argument('--changeLight', action="store_true", help='随机光度调节')
+    parser.add_argument('--filp',  help='水平翻转', action="store_true")
+    parser.add_argument('--mul_processs',  action="store_true", help='启用多进程处理', )
     args = parser.parse_args()
     return args
 
 if __name__ == '__main__':
     args = parse_args()
-
     #use multiprocess
     if args.mul_processs is True:
+        print("开启多进程模式")
         multiprocessAug(args)
     else:
+        print("启动默认模式")
         V = DataAugmentVOC(rootpath=args.root_path)
         if args.xmlpath is not None:
             V.setSave_xmlpath(args.xmlpath)

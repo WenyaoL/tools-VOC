@@ -2,8 +2,8 @@ import os
 from tqdm import tqdm
 import cv2
 import time
-import DateAugmentLabelImg.ImgParser as ImgP
-import DateAugmentLabelImg.LabelParser as LabelP
+import DataAugmentLabelImg.ImgParser as ImgP
+import DataAugmentLabelImg.LabelParser as LabelP
 
 
 class DataOperator:
