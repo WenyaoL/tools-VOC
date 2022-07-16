@@ -120,15 +120,23 @@ class ImgParser:
         nw = (abs(np.sin(rangle) * h) + abs(np.cos(rangle) * w)) * scale
         nh = (abs(np.cos(rangle) * h) + abs(np.sin(rangle) * w)) * scale
         # ask OpenCV for the rotation matrix
+        #生成旋转矩阵(新中心点)
         rot_mat = cv2.getRotationMatrix2D((nw * 0.5, nh * 0.5), angle, scale)
         # calculate the move from the old center to the new center combined
         # with the rotation
+        #新中心和旧中心的偏移
         rot_move = np.dot(rot_mat, np.array([(nw - w) * 0.5, (nh - h) * 0.5, 0]))
         # the move only affects the translation, so update the translation
+        #将偏移加入旋转矩阵
         rot_mat[0, 2] += rot_move[0]
         rot_mat[1, 2] += rot_move[1]
         # 仿射变换
-        rot_img = cv2.warpAffine(img, rot_mat, (int(math.ceil(nw)), int(math.ceil(nh))), flags=cv2.INTER_LANCZOS4)
+        rot_img = cv2.warpAffine(img,
+                                 rot_mat,
+                                 (int(math.ceil(nw)),
+                                  int(math.ceil(nh))),
+                                 flags=cv2.INTER_LANCZOS4,
+                                 borderValue=(255, 255, 255))
         return rot_img, rot_mat
 
     def shift_Img(self,x,y,img=None):

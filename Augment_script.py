@@ -15,7 +15,7 @@ def parse_args():
                         type=float)
     parser.add_argument('--val', dest='val', help='明度变化比例调节,范围0~2',default=1,
                         type=float)
-    parser.add_argument('--rotate', dest='rotate', help='旋转角度',
+    parser.add_argument('--rotate', dest='rotate', help='旋转角度(请勿大角度旋转，旋转应该在0~20)',
                         type=int)
 
     #枚举参试，出现代表true，否则代表false

@@ -60,6 +60,7 @@ class DataAugmentVOC:
 
                 #保存图片路径
                 save_path = os.path.join(self.save_imgpath,prefix + img)
+
                 #增强
                 cv2.imwrite(save_path,
                             callback(**kwargs['imgconfig']),
@@ -74,8 +75,10 @@ class DataAugmentVOC:
                 xml_path = os.path.join(self.Xmlpath, xml)
                 self.labP.setXML(xml_path)
 
-                #设置标签保存路径
-                kwargs['xmlconfig']['save_path'] = os.path.join(self.save_xmlpath, prefix+xml)
+                #设置标签保存路径和保存名称
+                kwargs['xmlconfig']['save_path'] = self.save_xmlpath
+                kwargs['xmlconfig']['save_name'] = prefix+xml
+
                 callback(**kwargs['xmlconfig'])
 
 
@@ -156,7 +159,6 @@ class DataAugmentVOC:
         :param scale:
         :return:
         '''
-        start = time.time()
 
         for img, xml in tqdm(self.sourceMap):
             #图片和标签路径
@@ -165,19 +167,23 @@ class DataAugmentVOC:
             #设置
             self.imgP.setImg(img_path)
             self.labP.setXML(xml_path)
+            #旋转图片
             rot_img, rot_mat = self.imgP.rotate_Img(angle=angle, scale=scale)
 
+            #保存旋转图片
             cv2.imwrite(os.path.join(self.save_imgpath, "rotate_"+img),
                         rot_img,
                         [int(cv2.IMWRITE_JPEG_QUALITY), 95]
                         )
+            #旋转标签
             self.labP.rotate_Object(rot_mat,
                                     w=rot_img.shape[0],
                                     h=rot_img.shape[1],
                                     c=rot_img.shape[2],
-                                    save_path=os.path.join(self.save_xmlpath, "rotate_"+xml)
+                                    save_path=self.save_xmlpath,
+                                    save_name="rotate_"+xml
                                     )
-        end = time.time()
+
 
 
     def filp(self,filp=1):

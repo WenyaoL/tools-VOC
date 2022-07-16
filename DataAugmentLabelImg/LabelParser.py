@@ -3,7 +3,7 @@ import os
 import cv2
 from lxml import objectify
 import lxml.etree as ET
-
+import time
 
 class LabelParser:
     def __init__(self, XMLPath=None):
@@ -42,18 +42,19 @@ class LabelParser:
             coords.append([name,x_min, y_min, x_max, y_max])
         return coords
 
-    def changeObject(self):
-        pass
 
-    def reverse_Object(self,filp=1,save_path=None):
+
+    def reverse_Object(self,filp=1,save_path=None,save_name=None):
         '''
             对label文件中的所有目标对象进行反转,默认存储在原文件
         :param filp: 反转方式（1：水平，0：垂直）
         :param save_path: 新的保存路径
+        :param save_name:新文件名
         :return:
         '''
-        if os.path.isdir(save_path):
-            save_path = os.path.join(save_path, self.XMLName.split('.')[0] + "_reverse_Object.xml")
+
+        # 更改filename标签名
+        self.change_filename(save_name)
 
         if filp==1:
             width = self.root.find('.//size/width')
@@ -77,9 +78,9 @@ class LabelParser:
                 ymax[index].text = max
                 ymin[index].text = min
 
-        self.tree.write(save_path, encoding="utf-8", xml_declaration=True)
+        self.tree.write(os.path.join(save_path,save_name), encoding="utf-8", xml_declaration=True)
 
-    def rotate_Object(self, rot_mat,w,h,c,save_path =None):
+    def rotate_Object(self, rot_mat,w,h,c,save_path =None,save_name = None):
         '''
             根据仿射变换矩阵来对对象标签进行转换,
             默认保存路径为原文件，也可以指定新的
@@ -87,6 +88,7 @@ class LabelParser:
 
         :param rot_mat:仿射变换矩阵
         :param save_path:新的保存路径
+        :param save_name:新文件名
         :return:
         '''
 
@@ -94,8 +96,8 @@ class LabelParser:
         if save_path is None:
             save_path =self.XMLPath
 
-        if os.path.isdir(save_path):
-            save_path = os.path.join(save_path, self.XMLName.split('.')[0] + "_reverse_Object.xml")
+        # 更改filename标签名
+        self.change_filename(save_name)
 
         #更改图片大小
         self.root.find('size/width').text = str(w)
@@ -114,7 +116,7 @@ class LabelParser:
             xmax = int(float(x_max.text))
             ymax = int(float(y_max.text))
             
-            # point1 = np.dot(rot_mat, np.array([xmin, ymin, 1]))          #这种新画出的框大一圈
+            # point1 = np.dot(rot_mat, np.array([xmin, ymin, 1]))          #这种新画出的框大一圈(这种适合框和物体完全切合的类型，框==物体)
             # point2 = np.dot(rot_mat, np.array([xmax, ymin, 1]))
             # point3 = np.dot(rot_mat, np.array([xmax, ymax, 1]))
             # point4 = np.dot(rot_mat, np.array([xmin, ymax, 1]))
@@ -135,16 +137,17 @@ class LabelParser:
             concat = concat.astype(np.int32)
             # 得到旋转后的坐标
             rx, ry, rw, rh = cv2.boundingRect(concat)
+
             x_min.text = str(rx)
             y_min.text = str(ry)
             x_max.text = str(rx + rw)
             y_max.text = str(ry + rh)
 
-        self.tree.write(save_path, encoding="utf-8", xml_declaration=True)
+        self.tree.write(os.path.join(save_path,save_name), encoding="utf-8", xml_declaration=True)
 
 
 
-    def copyXML(self, save_path=None):
+    def copyXML(self, save_path,save_name):
         '''
             复制当前XML文件到指定的新目录下
 
@@ -152,13 +155,17 @@ class LabelParser:
         :return:
         '''
 
+        #更改filename标签名
+        self.change_filename(save_name)
 
         path = self.root.find('path')
         if path is not None:
             path.text = save_path
-        self.tree.write(save_path, encoding="utf-8", xml_declaration=True)
 
-    def deleteObject(self, ObjectName, save_path=None):
+
+        self.tree.write(os.path.join(save_path,save_name), encoding="utf-8", xml_declaration=True)
+
+    def deleteObject(self, ObjectName, save_path,save_name):
         '''
             删除标签文件里的对应对象，默认写回到原文件，如果
             指定新的保存路径，信息将保存到新的文件中
@@ -170,21 +177,20 @@ class LabelParser:
         if save_path is None:
             save_path =self.XMLPath
 
-        if os.path.isdir(save_path):
-            save_path = os.path.join(save_path, self.XMLName.split('.')[0] + "_change.xml")
+        #更改filename标签名
+        self.change_filename(save_name)
 
         objs = self.root.findall('object')
         for obj in objs:
             objname = obj.find('name').text
             if objname  ==  ObjectName:
                 self.root.remove(obj)
-        if save_path !=None:
-            self.tree.write(save_path, encoding="utf-8", xml_declaration=True)
-        else:
-            self.tree.write(self.XMLPath, encoding="utf-8", xml_declaration=True)
+
+        self.tree.write(os.path.join(save_path,save_name), encoding="utf-8", xml_declaration=True)
 
 
-    def change_ObjectName(self, oldName, newName, save_path=None):
+
+    def change_ObjectName(self, oldName, newName, save_path,save_name):
         '''
             更改当前xml文件的对象名，默认写回原文件，也可以通过
             NewPath指定新的保存路径
@@ -194,10 +200,8 @@ class LabelParser:
         :param save_path: 新的文件保存路径
         :return:
         '''
-        if save_path is None:
-            save_path =self.XMLPath
-        if os.path.isdir(save_path):
-            save_path = os.path.join(save_path, self.XMLName.split('.')[0] + "_change.xml")
+        #更改filename标签名
+        self.change_filename(save_name)
 
         objs = self.root.findall('object')
         for obj in objs:
@@ -205,10 +209,12 @@ class LabelParser:
             if name.text == oldName:
                 name.text = newName
 
-        if save_path !=None:
-            self.tree.write(save_path, encoding="utf-8", xml_declaration=True)
-        else:
-            self.tree.write(self.XMLPath, encoding="utf-8", xml_declaration=True)
+
+        self.tree.write(os.path.join(save_path,save_name), encoding="utf-8", xml_declaration=True)
+
+    def change_filename(self,name):
+        #标签名+图片后缀
+        self.root.find('filename').text = name.split('.')[0]+'.'+self.root.find('filename').text.split('.')[-1]
 
     def getImg_size(self):
         '''
@@ -221,7 +227,7 @@ class LabelParser:
         return width,height,channel
 
 
-    def changeImg_size(self, newsize, save_path=None):
+    def changeImg_size(self, newsize, save_path,save_name):
         '''
             文件默认存储路径为原文件，可以通过NewPath指定
             新的保存路径
@@ -234,8 +240,10 @@ class LabelParser:
         '''
         if save_path is None:
             save_path =self.XMLPath
-        if os.path.isdir(save_path):
-            save_path = os.path.join(save_path, self.XMLName.split('.')[0] + "_changeImg_size.xml")
+
+        #更改filename标签名
+        self.change_filename(save_name)
+
 
         width = self.root.find('size/width')
         oldwidth = float(width.text)
@@ -257,28 +265,40 @@ class LabelParser:
             xmax.text = str(int(int(xmax.text) * changerate_x))
             ymax.text = str(int(int(ymax.text) * changerate_y))
 
-        if save_path != None:
-            self.tree.write(save_path, encoding="utf-8", xml_declaration=True)
-        else:
-            self.tree.write(self.XMLPath, encoding="utf-8", xml_declaration=True)
+
+        self.tree.write(os.path.join(save_path,save_name), encoding="utf-8", xml_declaration=True)
+
 
 
 
 if __name__ == '__main__':
     #加载
-    paser = LabelParser(r'.\TestDate\label\000004.xml')
-    #改变图片大小
-    paser.changeImg_size([1222,1250],r'.\TestDate\label')
+    paser = LabelParser(r'..\TestData\VOC\Annotations\000004.xml')
     #获取图片size
     print(paser.getImg_size())
-    #改变对象名，默认写回加载文件，也可以指定新的路径。
-    paser.change_ObjectName('car', 'bigcar',save_path='.\TestDate\label')
 
-    #删除指定Object
-    #paser.deleteObject('star')
+    # #改变对象名，默认写回加载文件，也可以指定新的路径。
+    paser.change_ObjectName('car',
+                             'bigcar',
+                             save_path=r'F:\pycharm_workplace\tools-VOC\TestData\VOC\change_Annotations',
+                             save_name='xxx1.xml')
 
-    #获得对象数据
+    # #改变图片大小
+    paser.changeImg_size([1222,1250],
+                         r'F:\pycharm_workplace\tools-VOC\TestData\VOC\change_Annotations',
+                         'xxx2.xml')
+
+
+    #
+    # #删除指定Object
+    paser.deleteObject('star',
+                       r'F:\pycharm_workplace\tools-VOC\TestData\VOC\change_Annotations',
+                       'xxx3.xml')
+    #
+    # #获得对象数据
     print(paser.getObject())
-
-    #对label里面的框做镜像反转,并指定新保存路径
-    paser.reverse_Object(filp=0, save_path='.\TestDate\label')
+    #
+    # #对label里面的框做镜像反转,并指定新保存路径
+    paser.reverse_Object(filp=0,
+                         save_path=r'F:\pycharm_workplace\tools-VOC\TestData\VOC\change_Annotations',
+                         save_name='xxx4.xml')
